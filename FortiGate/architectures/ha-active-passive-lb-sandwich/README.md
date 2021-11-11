@@ -46,9 +46,6 @@ You MUST create the external and protected VPC networks and subnets before using
 
 All VPC Networks already created before deployment and provided to the template using `networks.*.vpc` and `networks.*.subnet` properties, SHOULD have first 2 IP addresses available for FortiGate use. Addresses are assigned statically and it's the responsibility of administrator to make sure they do not overlap.
 
-## Dependencies
-This template uses [fgcp-ha-ap-sdn.jinja](fgcp-ha-ap-sdn.md) template and helpers in utils directory.
-
 ## How to deploy
 See example deployment templates for different platforms:
 - [Terraform](examples-terraform)
