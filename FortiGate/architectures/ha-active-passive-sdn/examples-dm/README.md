@@ -1,1 +1,4 @@
+- [SDN-based Active-Passive HA - minimal](ha-ap-sdn-minimal.yaml) - smallest possible config to deploy an FGCP Ha cluster
+- [SDN-based Active-Passive HA - BYOL](ha-ap-sdn-byol.yaml) - check this one to see how you can deploy a BYOL FGT cluster and license it during provisioning
+- [SDN-based Active-Passive HA - full](ha-ap-sdn-full.yaml) - all the properties you can use with this template (it's always a good idea to consult the schema file)
 - [SDN-based Active-Passive HA](ha-ap-sdn_multiip-with-server.yaml) - using multiple public IPs, includes a demo server 

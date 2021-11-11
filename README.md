@@ -1,5 +1,10 @@
-Stub repo for directory structure proposal
+# Fortinet Google Cloud templates
 
-root directory would be divided by products (like in azure-templates)
+Thank you for visiting Fortinet Google Cloud templates repository. This repository provides:
+- information about reference architectures
+- ready to use Terraform modules
+- ready to use Deployment Manager modules
+- example deployments in both languages
 
-check [FortiGate](FortiGate) for subdirectories
+## Support
+Fortinet-provided scripts in this and other GitHub projects do not fall under the regular Fortinet technical support scope and are not supported by FortiCare Support Services. For direct issues, please refer to the [Issues](https://github.com/fortinet/gcp-templates/issues) tab of this GitHub project.

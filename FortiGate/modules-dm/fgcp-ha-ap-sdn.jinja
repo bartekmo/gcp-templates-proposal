@@ -1,7 +1,7 @@
 {% set prefix = properties.prefix|default(env.deployment) %}
 
-{% import "../../utils/netcalc.jinja" as netcalc %}
-{% import "../../utils/images.jinja" as images %}
+{% import "utils-netcalc.jinja" as netcalc %}
+{% import "utils-images.jinja" as images %}
 
 {% set firmwareImage=images.getFgtImage( properties.version, properties.license.type ) %}
 {% set region=properties.zones[0].split("-")[0]~"-"~properties.zones[0].split("-")[1] %}
@@ -158,7 +158,7 @@ resources:
         subnet: {{ mgmtSubnet }}
         ipCidrRange: {{ mgmtCidrRange }}
         networkIP: {{ netcalc.getNthIpWithMask( mgmtCidrRange, loop.index ) }}
-  {# Skip routes and cloud firewall rules creation for slave (second) instance #}
+  {# Skip routes and cloud firewall rules creation for secondary instance #}
   {% if loop.index0>0 %}
     routes: {{[]}}
     createCloudFirewallRules: false
@@ -237,11 +237,13 @@ resources:
       end
       {%- endif %}
       {{ properties.fwConfig | indent(6) }}
+{% if properties.forwardedPublicIPs|length > 0 %}
 - name: {{prefix}}-fgt{{ loop.index }}-target
   type: compute.v1.targetInstance
   properties:
     instance: $(ref.{{prefix}}-fgt{{loop.index}}.selfLink)
     zone: {{properties.zones[loop.index0]}}
+{% endif %}
 {% endfor %}
 
 - name: {{ prefix }}-fgt-allow-hasync

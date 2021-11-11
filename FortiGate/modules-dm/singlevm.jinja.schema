@@ -1,13 +1,13 @@
 info:
-  title: Fortigate High Availability Active-Passive cluster with floating external IP and route
-  version: 1.0
+  title: Single Fortigate VM
+  version: 1.1
 
 imports:
-- path: ../../utils/netcalc.jinja
-- path: singlevm.jinja
+- path: utils-netcalc.jinja
+- path: utils-images.jinja
 
 required:
-- zones
+- zone
 - region
 - networks
 
@@ -15,19 +15,24 @@ properties:
   prefix:
     type: string
     description: Prefix to be added to all resource names
-  zones:
-    type: array
-    description: Availability zones names list
-    default:
-    - us-central1-b
-    - us-central1-c
+  name:
+    type: string
+    description: (optional) Name of the firewall instance (minus prefix)
+    default: fgt
+  region:
+    type: string
+    description: Region to deploy to
+  zone:
+    type: string
+    description: Availability zone name for master instance
+    metadata: gce-zone
   instanceType:
     type: string
     description: Instance size to be used for FGT deployment
     default: e2-highcpu-4
   license:
     type: object
-    description: Licensing information. properties.type can be "byol" or "payg". For BYOL deployments include lics array pointing to the license files.
+    description: Licensing information. properties.type can be "byol" or "payg". For BYOL deployments include licproperty pointing to the license files.
     default:
       type: payg
   version:
@@ -48,28 +53,13 @@ properties:
     type: boolean
     description: Enable or disable serial port for instances
     default: true
+  externalIP:
+    type: object
+    description: (optional) Address of existing Public IP to be used with the VM instead of automatically generated one
   attachPublicIP:
     type: boolean
     description: Set to false for deployments without directly attached public IP
     default: true
-  forwardedPublicIPs:
-    type: array
-    description: External IP addresses attached using Protocol Forwarding
-    default: []
-    items:
-      type: object
-      properties:
-        name:
-          type: string
-        addressLink:
-          type: string
-        protocols:
-          type: array
-          description: List of protocols to forward
-          default: ["TCP","UDP"]
-          items:
-            type: string
-            enum: ["TCP", "UDP", "ESP", "AH", "SCTP", "ICMP", "L3_DEFAULT"]
   fwConfig:
     type: string
     description: Additional configuration to be passed to the firewall
@@ -80,3 +70,7 @@ properties:
     - destRange: 0.0.0.0/0
       name: default
       priority: 100
+  createCloudFirewallRules:
+    type: boolean
+    default: true
+    description: Can be used to skip creating cloud firewall rules and direct route (e.g. for HA slave instance)

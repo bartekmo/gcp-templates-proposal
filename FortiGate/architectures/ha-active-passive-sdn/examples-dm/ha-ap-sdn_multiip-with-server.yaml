@@ -1,26 +1,32 @@
 # This configuration will deploy a High Availability Active-Passive cluster with SDN Connector-based failover
-# Protected (internal) and external networks are created in configuration and passed to the template
-# Template will create 2 additional VPCs for management and HA internal traffic
+# FGTs are provisioned with an example config and a simple web server (vm-demo-server)
+# is added in the internal network.
+
+# 4 Sample VPC Networks are created before deploying the fortigate cluster
+
+# Uncomment fgtdemo-efr-addr1-tcp in line ~130 with your deployment name to make
+# demo web server provision in correct order
+# Replace paths to license1.lic and license2.lic with your real license files
 
 imports:
-- path: ../modules/fgcp-ha-ap-sdn.jinja
+- path: ../../../modules-dm/fgcp-ha-ap-sdn.jinja
   name: fgcp-ha-ap-sdn.jinja
-- path: /Users/bartekmo/Documents/secrets/FG-VM04_40009717/FGVM04TM21008011.lic
+- path: ../../../../secrets/FGVM04TM21008011.lic
   name: license1.lic
-- path: /Users/bartekmo/Documents/secrets/FG-VM04_40009717/FGVM04TM21008012.lic
+- path: ../../../../secrets/FGVM04TM21008012.lic
   name: license2.lic
 
 # This template is included to simplify creating of demo VPCs. You will not need
 # it if deploying with your existing networks.
-- path: sample-vpcs.jinja
-  name: sample-vpcs.jinja
+- path: ../../../modules-dm/utils-sample-vpcs.jinja
+  name: utils-sample-vpcs.jinja
 
 resources:
 # First, let's create a sample set of VPC Networks with subnets.
 # You will not need it if you re-use this configuration with your VPCs, but
 # remember to modify references in the fortigate-cluster resource below
 - name: Sample_Networks
-  type: sample-vpcs.jinja
+  type: utils-sample-vpcs.jinja
   properties:
     region: europe-west1
 
@@ -39,14 +45,14 @@ resources:
       - license1.lic
       - license2.lic
     networks:
-# Be careful! this configuration refers VPC and subnets created by the Sample_Networks
-# template and included in that template output. You should replace them with URLs of
+# NOTE: this configuration references VPC and subnets created by the Sample_Networks
+# template and uses URLs included in that template output. You should replace them with URLs of
 # your own networks and subnets. URLs for hasync and mgmt can be skipped to make the template
 # create new VPCs.
       external:
         vpc: $(ref.Sample_Networks.external-vpc)
         subnet: $(ref.Sample_Networks.external-sb)
-#        ipCidrRange: 172.20.0.0/24
+        ipCidrRange: 172.20.0.0/24
       internal:
         vpc: $(ref.Sample_Networks.internal-vpc)
         subnet: $(ref.Sample_Networks.internal-sb)
@@ -59,7 +65,9 @@ resources:
         vpc: $(ref.Sample_Networks.mgmt-vpc)
         subnet: $(ref.Sample_Networks.mgmt-sb)
         ipCidrRange: 172.20.3.0/24
-    attachPublicIP: false
+    attachPublicIP: false #disables directly attached EIP
+# Let's add 2 EIPs using protocol forwarding. Template by default will forward TCP and UDP but
+# you can modify it and tell it to forward eg. only ICMP
     forwardedPublicIPs:
     - name: addr1
     - name: addr2
@@ -119,7 +127,7 @@ resources:
   type: compute.v1.instance
   metadata:
     dependsOn:
-    - bm-pfwd-efr-addr1-tcp
+#    - fgtdemo-efr-addr1-tcp
   properties:
     zone: europe-west1-b
     machineType: zones/europe-west1-b/machineTypes/f1-micro
