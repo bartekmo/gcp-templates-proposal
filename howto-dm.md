@@ -1,4 +1,4 @@
-All templates are written for [GCP Deployment Manager](https://cloud.google.com/deployment-manager). DM templates can be deployed using [`gcloud`](https://cloud.google.com/sdk) command-line tool available for local downloads and in your [cloud shell](https://cloud.google.com/shell/docs/using-cloud-shell).
+Deployment Manager templates can be deployed using [`gcloud`](https://cloud.google.com/sdk) command-line tool available for local downloads and in your [cloud shell](https://cloud.google.com/shell/docs/using-cloud-shell).
 
 Templates (\*.jinja) can be referenced directly (and provided all parameters in the command line), e.g.:
 ```
@@ -16,7 +16,7 @@ imports:
   name: ha-ap.jinja
 ```
 
-See [examples](examples) directory for configuration file examples.
+See individual architecture directories for configuration file examples.
 
 ## Properties Available
 All templates in this directory share common properties (at least most of them). Properties are configurable values you can easily modify either using `--properties` if deploying template file directly, or by adding them to the configuration file under `properties` section.
