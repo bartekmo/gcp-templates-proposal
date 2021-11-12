@@ -20,10 +20,10 @@ Internal NIC (port2) is configured as target for a custom route added to interna
 This configuration file includes plain YAML declaration of a FortiGate instance and a log disk. It will not create any additional resources and is provided as a basis for anyone wishing to create their own templates. As it references VPC Networks and subnets, they need to be created before deploying the config file. Custom route and cloud firewall rules need to be added manually.
 
 #### singlevm2.jinja
-This file provides a highly flexible template for deploying a single FortiGate instance with all additional necessary resources and is meant to be included in customer Infrastructure-as-Code. singlevm2 is used in some other architectures provided in this repository.
+This file provides a highly flexible template for deploying a single FortiGate instance with all additional necessary resources and is meant to be included in customer Infrastructure-as-Code. singlevm2 can deploy FortiGate instance with any (1-8) number of network interfaces and is used in some other architectures provided in this repository.
 
 Created resources:
-- 1 FortiGate VM instance (BYOL or PAYG, depending on license.type property) with variable number of network interfaces (depending on networks property)
+- 1 FortiGate VM instance (BYOL or PAYG, depending on license.type property)
 - 1 log disk
 - external IP addresses - for each externalIP and additionalExternalIPs
 - forwarding rules - for each additionalExternalIPs entry
@@ -35,6 +35,8 @@ Required configuration:
 - region
 - list of networks to connect FGT VM to
 
-(see [config.minimal.yaml](config-minimal.yaml) for an example)
+(see [config.yaml](deployment-manager/config.yaml) for an example)
+
+For full list of supported properties, please consult the [schema file](deployment-manager/singlevm2.jinja.schema).
 
 ### Terraform
