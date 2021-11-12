@@ -4,8 +4,8 @@ info:
   version: 2.0
 
 imports:
-- path: ../../utils/netcalc.jinja
-- path: ../../utils/images.jinja
+- path: utils-netcalc.jinja
+- path: utils-images.jinja
 
 required:
 - zone
@@ -35,7 +35,7 @@ properties:
   version:
     type: string
     description: Firmware version to deploy.
-    default: 6.4.2
+    default: 7.0.2
   logDiskSizeGb:
     type: number
     description: Size of the secondary disk for logging. Set to 0 to disable the log disk.

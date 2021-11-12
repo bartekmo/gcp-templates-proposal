@@ -1,4 +1,4 @@
-{% import "../../utils/netcalc.jinja" as netcalc %}
+{% import "utils-netcalc.jinja" as netcalc %}
 
 {# If no prefix is defined in properties, set it to deployment name #}
 {% set prefix = properties.prefix|default(env.deployment) %}
@@ -151,6 +151,7 @@ resources:
     instanceGroup: $(ref.{{ prefix }}-hagroup{{ zoneindx }}.name)
     instances:
     - instance: $(ref.{{ prefix }}-fgt{{ loop.index }}.selfLink)
+{#}
 - name: {{ prefix }}-hagroup{{zoneindx}}-setPort
   action: gcp-types/compute-v1:compute.instanceGroups.setNamedPorts
   metadata:
@@ -162,6 +163,7 @@ resources:
     namedPorts:
     - name: http
       port: 80
+{#}
 {% endfor %}
 
 - name: {{ prefix }}-ilb-probe{{ properties.probePort }}
