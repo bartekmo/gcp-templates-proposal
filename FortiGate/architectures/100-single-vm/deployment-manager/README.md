@@ -1,10 +1,11 @@
-### Deploying single FortiGate VM with Deployment Manager
+# Deploying single FortiGate VM with Deployment Manager
 
-#### singlevm-no-template.yaml
+## Templates
+### singlevm-no-template.yaml
 
 This configuration file includes plain YAML declaration of a FortiGate instance and a log disk. It will not create any additional resources and is provided as a basis for anyone wishing to create their own templates. As it references VPC Networks and subnets, they need to be created before deploying the config file. Custom route and cloud firewall rules need to be added manually.
 
-#### singlevm2.jinja
+### singlevm2.jinja
 This file provides a highly flexible template for deploying a single FortiGate instance with all additional necessary resources and is meant to be included in customer Infrastructure-as-Code. singlevm2 can deploy FortiGate instance with any (1-8) number of network interfaces and is used in some other architectures provided in this repository.
 
 Created resources:
@@ -22,8 +23,16 @@ Required configuration:
 
 For full list of supported properties, please consult the [schema file](singlevm2.jinja.schema).
 
-#### Examples
+## Examples
 - [config-dhcp.yaml](examples/config-dhcp.yaml) - very basic example of deploying with 2 automatically configured (DHCP) network interfaces and PAYG license
 - [config-byol.yaml](examples/config-byol.yaml) - 2-nic instance with BYOL license pulled from a license file and NICs configured statically for empty subnets
 - [config-protocolforwarding.yaml](examples/config-protocolforwarding.yaml) - BYOL licensing, statically configured NICs and 3 public IPs forwarded using protocol forwarding
 - [config-8-nic.yaml](examples/config-8-nic.yaml) - 8-nic instance with BYOL license
+
+## How to deploy
+Deployment manager configs (YAML) can be deployed using the *gcloud* command line tool.
+
+1. Open Cloud Shell
+1. clone the git repository (it is possible to download only a single yaml file if you change the link in *imports* section to be an absolute URL to the file on GitHub)
+1. deploy using
+`gcloud deployment-manager deployments create my-fgt-poc --config config.yaml`
