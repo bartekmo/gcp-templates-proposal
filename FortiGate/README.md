@@ -2,11 +2,13 @@
 
 In this directory you will find templates and reference architectures for running a FortiGate Next-Generation Firewall VM in Google Cloud (GCE).
 
+Hint: architectures are marked with "100", "200", "300" to indicate their level of complexity and possible dependencies ("200" architectures make use of "100" and "300" architectures of "200").
+
 ## Common Architectures
 
-### [Active-Passive HA Cluster with SDN Connector Failover](ha-active-passive-sdn/)
+### [Active-Passive HA Cluster with SDN Connector Failover](200-ha-active-passive-sdn/)
 <p align="center">
-<img width="500px" src="https://lucid.app/publicSegments/view/09e00569-7fab-4e9f-92f1-de8fd9148623/image.png" alt="FortiGate A-P HA with SDN Connector">
+<img width="600px" src="https://lucid.app/publicSegments/view/09e00569-7fab-4e9f-92f1-de8fd9148623/image.png" alt="FortiGate A-P HA with SDN Connector">
 </p>
 
 This design deploys 2 FortiGate VMs in 2 zones and preconfigure an Active/Passive cluster using unicast FGCP HA protocol. FGCP synchronizes the configuration and session table. One (directly) or more (using Protocol Forwarding) External IP addresses can be assigned to the cluster. On failover the newly active FortiGate takes control and issues API calls to GCP Compute API to shift the External IPs and update the route(s) to itself. Shifting the EIPs and routes takes about 30 seconds, but preserves existing connections.
@@ -14,7 +16,7 @@ This design deploys 2 FortiGate VMs in 2 zones and preconfigure an Active/Passiv
 Multiple IPs are available in this design with FortiGate version 7.0.2 and later.
 This design is subject to 99.99% GCP Compute SLA.
 
-### [Peered Security Services Hub](peered-security-hub/)
+### [Peered Security Services Hub](300-peered-security-hub/)
 /upcoming/
 
 ## Other Architectures

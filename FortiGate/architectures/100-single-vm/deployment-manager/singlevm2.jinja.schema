@@ -4,8 +4,8 @@ info:
   version: 2.0
 
 imports:
-- path: ../../../modules-dm/utils-netcalc.jinja
-- path: ../../../modules-dm/utils-images.jinja
+- path: utils-netcalc.jinja
+- path: utils-images.jinja
 
 required:
 - zone
@@ -47,7 +47,7 @@ properties:
   logDiskSizeGb:
     type: number
     description: Size of the secondary disk for logging. Set to 0 to disable the log disk.
-    default: 30.0
+    default: 100.0
   networks:
     type: array
     description: Indicate VPC Networks and subnets to be used (internal, external, hasync, mgmt). Each network need references to vpc and subnet (vpc and subnet properties) as well as cidr defined.

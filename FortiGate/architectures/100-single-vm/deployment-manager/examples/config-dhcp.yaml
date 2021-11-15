@@ -1,6 +1,6 @@
 imports:
-- path: singlevm2.jinja
-- path: ../../../modules-dm/utils-sample-vpcs.jinja
+- path: ../singlevm2.jinja
+- path: ../../../../modules-dm/utils-sample-vpcs.jinja
   name: sample-vpcs.jinja
 
 resources:
@@ -13,12 +13,11 @@ resources:
     - external
     - internal
 
-# Next, deploy a FortiGate with 2 interfaces in above VPC Networks
+# Next, let's deploy a FortiGate instance with network interfaces in 2 VPCs we created above
 - name: Fortigate
   type: singlevm2.jinja
   properties:
     zone: europe-west1-b
-    multiIpSubnetEnable: false
     networks:
     - name: ext
       vpcLink: $(ref.Sample_Networks.external-vpc)
@@ -28,7 +27,6 @@ resources:
     - name: int
       vpcLink: $(ref.Sample_Networks.internal-vpc)
       subnetLink: $(ref.Sample_Networks.internal-sb)
-      ipCidrRange: 172.20.1.0/24
 
 outputs:
 - name: singlevm2_template

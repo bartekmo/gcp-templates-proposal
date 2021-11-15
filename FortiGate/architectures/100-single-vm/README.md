@@ -1,6 +1,6 @@
 # Single FortiGate VM
 
-Single VM is a basic setup good to start exploring capabilities of the next-generation firewall. It will allow you to protect your workloads running in Google Cloud as well as inspect the outbound traffic. As a single VM is subject to lower GCP Compute SLA (99.5%), it is very rarely used in production deployments.
+Single VM is a basic setup good to start exploring capabilities of the next-generation firewall and a base layer for more advanced architectures. It will allow you to protect your workloads running in Google Cloud as well as inspect the outbound traffic, but - as a single VM is subject to lower GCP Compute SLA (99.5%) - it is very rarely used as a production architecture.
 
 ## Design
 
@@ -12,31 +12,8 @@ External NIC (port1) is connected to Internet using its public IP address and op
 
 Internal NIC (port2) is configured as target for a custom route added to internal VPC Network, which causes all outbound traffic to be routed via FortiGate appliance.
 
-## Templates
-### Deployment Manager
+## Deploying a single FortiGate VM
 
-#### singlevm-no-template.yaml
-
-This configuration file includes plain YAML declaration of a FortiGate instance and a log disk. It will not create any additional resources and is provided as a basis for anyone wishing to create their own templates. As it references VPC Networks and subnets, they need to be created before deploying the config file. Custom route and cloud firewall rules need to be added manually.
-
-#### singlevm2.jinja
-This file provides a highly flexible template for deploying a single FortiGate instance with all additional necessary resources and is meant to be included in customer Infrastructure-as-Code. singlevm2 can deploy FortiGate instance with any (1-8) number of network interfaces and is used in some other architectures provided in this repository.
-
-Created resources:
-- 1 FortiGate VM instance (BYOL or PAYG, depending on license.type property)
-- 1 log disk
-- external IP addresses - for each externalIP and additionalExternalIPs
-- forwarding rules - for each additionalExternalIPs entry
-- target instance - if at least one additionalExternalIPs entry exists
-- cloud firewall rules - allowing all traffic to FGT VM
-- custom route towards port2 of FGT VM
-
-Required configuration:
-- region
-- list of networks to connect FGT VM to
-
-(see [config.yaml](deployment-manager/config.yaml) for an example)
-
-For full list of supported properties, please consult the [schema file](deployment-manager/singlevm2.jinja.schema).
-
-### Terraform
+- [with Deployment Manager](deployment-manager/)
+- [with Terraform](terraform/)
+- [with gcloud utility](deploy-gcloud.md)
