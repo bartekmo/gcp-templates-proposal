@@ -20,16 +20,16 @@ This design is subject to 99.99% GCP Compute SLA.
 GCP limitations related to deployment of multi-NIC instances make the usual architecture for deploying firewalls very static and costly (a classic 3-tier application would require an 8-core FGT instances). Peered Security Hub architecture provides flexibility of securing up to 25 LAN segments using standard VM04 instances.
 
 <p slign="center">
-<img width="500px" src="https://lucid.app/publicSegments/view/cdc1dc90-2ab4-4488-841a-92e2795ea630/image.png alt="FortiGate Hub and Spoke">
+<img width="500px" src="https://lucid.app/publicSegments/view/cdc1dc90-2ab4-4488-841a-92e2795ea630/image.png" alt="FortiGate Hub and Spoke">
 </p>
 
 ## Other Architectures
 
-### [Single VM](single-vm/)
+### [Single VM](architectures/100-single-vm/)
 This single FortiGate VM will process all the traffic and as such become a single point of failure during operations as well as upgrades. This block can also be used in an architecture with multiple regions where a FortiGate is deployed in each region.
 Single instance is subject to 99.5% GCP compute SLA.
 
-/upcoming/
+![FGT Single VM details](https://lucid.app/publicSegments/view/4e56ef05-671c-47f3-a2cd-65cca6185f20/image.png)
 
 ### [Active-Passive HA in Load Balancer Sandwich](ha-active-passive-lb-sandwich/)
 This design will deploy 2 FortiGate VMs in 2 zones, preconfigure an Active/Passive cluster using unicast FGCP HA protocol, and place them between a pair of external and internal load balancers. On failover load balancers will detect failure of the primary instance using active probes on port 8008 and will switch traffic to the secondary instance. The failover time is noticeably faster than using Fabric Connector and is configurable in Health Check settings. This design supports multiple public IPs.
