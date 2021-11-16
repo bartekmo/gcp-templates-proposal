@@ -6,18 +6,22 @@ Hint: architectures are marked with "100", "200", "300" to indicate their level 
 
 ## Common Architectures
 
-### [Active-Passive HA Cluster with SDN Connector Failover](200-ha-active-passive-sdn/)
-<p align="center">
-<img width="600px" src="https://lucid.app/publicSegments/view/09e00569-7fab-4e9f-92f1-de8fd9148623/image.png" alt="FortiGate A-P HA with SDN Connector">
-</p>
-
+### [Active-Passive HA Cluster with SDN Connector Failover](architectures/200-ha-active-passive-sdn/)
 This design deploys 2 FortiGate VMs in 2 zones and preconfigure an Active/Passive cluster using unicast FGCP HA protocol. FGCP synchronizes the configuration and session table. One (directly) or more (using Protocol Forwarding) External IP addresses can be assigned to the cluster. On failover the newly active FortiGate takes control and issues API calls to GCP Compute API to shift the External IPs and update the route(s) to itself. Shifting the EIPs and routes takes about 30 seconds, but preserves existing connections.
 
 Multiple IPs are available in this design with FortiGate version 7.0.2 and later.
 This design is subject to 99.99% GCP Compute SLA.
 
-### [Peered Security Services Hub](300-peered-security-hub/)
-/upcoming/
+<p align="center">
+<img width="700px" src="https://lucid.app/publicSegments/view/09e00569-7fab-4e9f-92f1-de8fd9148623/image.png" alt="FortiGate A-P HA with SDN Connector">
+</p>
+
+### [Peered Security Services Hub](architectures/300-peered-security-hub/)
+GCP limitations related to deployment of multi-NIC instances make the usual architecture for deploying firewalls very static and costly (a classic 3-tier application would require an 8-core FGT instances). Peered Security Hub architecture provides flexibility of securing up to 25 LAN segments using standard VM04 instances.
+
+<p slign="center">
+<img width="500px" src="https://lucid.app/publicSegments/view/cdc1dc90-2ab4-4488-841a-92e2795ea630/image.png alt="FortiGate Hub and Spoke">
+</p>
 
 ## Other Architectures
 
@@ -34,7 +38,7 @@ This design is subject to 99.98% GCP Compute SLA.
 /upcoming/
 
 ### [IDS with Packet Mirroring](ids-packet-mirroring/)
-/upcoming/
+FortiGate virtual appliances are capable of detecting and blocking threats using the FortiLabs-powered IDS/IPS system as well as the built-in antivirus engine. While it is recommended to deploy FortiGates inline, so the threats can be blocked as soon as they are detected, it is not possible to do so for the network traffic inside a Google Cloud VPC Network. In this case, one can utilize GCP Packet Mirroring feature together with FortiGate one-arm-sniffer mode to detect malicious or infected traffic and alert the administrators. For multiple sensors it's best to use FortiAnalyzer as the correlation and aggregation engine providing single pane of glass insights into the traffic patterns as well as detected threats or compromised VMs.
 
 ### [Network Connectivity Center](network-connectivity-center/)
 /upcoming/
