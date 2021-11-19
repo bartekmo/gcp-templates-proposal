@@ -58,8 +58,8 @@ Note that the configuration of system.sdn-connector.forwarding-rule will differ 
 
 ## Deploying an SDN Connector-based Active-Passive cluster
 See example deployment templates for different platforms:
-- [with Deployment Manager](examples-dm)
-- [with Terraform](examples-terraform)
+- [with Deployment Manager](deployment-manager)
+- [with Terraform](terraform)
 
 ## See also
 [Other FortiGate architectures](../../)
