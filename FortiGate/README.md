@@ -17,10 +17,10 @@ This design is subject to 99.99% GCP Compute SLA.
 </p>
 
 ### [Peered Security Services Hub](architectures/300-peered-security-hub/)
-GCP limitations related to deployment of multi-NIC instances make the usual architecture for deploying firewalls very static and costly (a classic 3-tier application would require an 8-core FGT instances). Peered Security Hub architecture provides flexibility of securing up to 25 LAN segments using standard VM04 instances.
+GCP limitations related to deployment of multi-NIC instances make the usual architecture for deploying firewalls very static and costly (a classic 3-tier application would require an 8-core FGT instances). Peered Security Hub architecture provides flexibility of securing up to 25 LAN segments using a single internal NIC.
 
-<p slign="center">
-<img width="500px" src="https://lucid.app/publicSegments/view/cdc1dc90-2ab4-4488-841a-92e2795ea630/image.png" alt="FortiGate Hub and Spoke">
+<p align="center">
+<img width="550px" src="https://lucid.app/publicSegments/view/cdc1dc90-2ab4-4488-841a-92e2795ea630/image.png" alt="FortiGate Hub and Spoke">
 </p>
 
 ## Other Architectures

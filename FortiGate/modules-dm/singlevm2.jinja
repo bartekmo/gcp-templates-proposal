@@ -182,7 +182,7 @@ resources:
           {%- for additionalIP in nic.additionalExternalIPs %}
           config firewall ippool
             edit "{{ prefix }}-{{ additionalIP.name }}"
-              set type one-to-one
+              set type overload
               set startip $(ref.{{ prefix }}-{{ additionalIP.name }}.address)
               set endip $(ref.{{ prefix }}-{{ additionalIP.name }}.address)
               set comments "{{ additionalIP.description | default('Added by deployment template')}}"

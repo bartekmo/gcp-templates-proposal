@@ -1,0 +1,23 @@
+info:
+  title: Peerings
+  description: Creates peerings for peered hub-and-spoke design
+  version: 2.0
+
+requires:
+- hub
+- spokes
+
+properties:
+  hubLink:
+    type: string
+    description: URI of hub VPC resource
+  spokes:
+    type: array
+    maxItems: 25
+    items:
+      type: string
+      description: Full URI (including "https://www.googleapis.com") to spoke VPC resource
+  deleteSpokeDefaultRoutes:
+    type: boolean
+    default: true
+    description: If template should remove the existing default route from spoke VPCs.
