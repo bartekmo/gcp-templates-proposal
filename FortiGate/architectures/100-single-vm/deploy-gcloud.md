@@ -11,7 +11,7 @@ Note: subnets must be in the same region where you plan to deploy your FortiGate
 You also must know the following values:
 1. URLs of external VPC and subnet
 1. URLs of internal VPC and subnet
-1. URL of image you're going to deploy (see [below](#how-to-find-image) for more details)
+1. URL of image you're going to deploy (see [below](#how-to-find-the-image) for more details)
 1. zone where you want to create your FortiGate VM
 
 to not get lost, it's a good idea to save these values in shell variables. See the example below:
@@ -122,14 +122,20 @@ gcloud compute firewall-rules create allow-internal-to-fgt \
 
 ### [optional] Additional external IP addresses
 
-[Protocol Forwarding]() is a GCP feature, which allows attaching additional external addresses to a VM. Before creating and attaching an address, a targetInstance resource must be created:
+[Protocol Forwarding](https://cloud.google.com/load-balancing/docs/protocol-forwarding) is a GCP feature, which allows attaching additional external addresses to a VM. Before creating and attaching an address, a targetInstance resource must be created:
 
 ```
-gcloud compute target-instance create my-fgt-target
+gcloud compute target-instance create my-fgt-target \
+  --target-instance my-fortigate
 ```
 
+Next, a forwarding rule can be added:
+```
+gcloud compute forwarding-rules create my-fwd-rule \
+  --
+```
 
-### How to find the image
+## How to find the image
 You can either deploy one of the official images published by Fortinet or create your own image with disk image downloaded from [support.fortinet.com](https://support.fortinet.com). We recommend you use official images unless you need to deploy a custom image.
 
 Fortinet publishes official images in *fortigcp-project-001* project. This is a special public project and every GCP user can list images available there using command
@@ -145,7 +151,7 @@ will get you a list of image URLs for FortiGate PAYG, and
 
 will save the URL of the newest BYOL image into FGT_IMG variable
 
-### References
+## References
 - [gcloud compute addresses create](https://cloud.google.com/sdk/gcloud/reference/compute/addresses/create)
 - [gcloud compute disks create](https://cloud.google.com/sdk/gcloud/reference/compute/disks/create)
 - [gcloud compute instances create](https://cloud.google.com/sdk/gcloud/reference/compute/instances/create)
