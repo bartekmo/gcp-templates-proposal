@@ -1,3 +1,6 @@
+# This template adds a route on external side of the cluster. It can be used to route traffic from
+# cloud-native connectivity like Cloud VPN or Interconnect via FGTs to internal side.
+
 imports:
 - path: ../../../modules-dm/fgcp-ha-ap-multilb.jinja
   name: fgcp-ha-ap-multilb.jinja
@@ -29,6 +32,9 @@ resources:
       ipCidrRange: 172.20.0.0/24
       serviceIPs: # this section triggers creation of ELB and EIP
       - name: app1
+      routes: # this section triggers creation of ILB
+      - destRange: 172.20.1.0/24
+        name: rt-to-internal
     - name: internal
       vpcLink: $(ref.Sample_Networks.internal-vpc)
       subnetLink: $(ref.Sample_Networks.internal-sb)
