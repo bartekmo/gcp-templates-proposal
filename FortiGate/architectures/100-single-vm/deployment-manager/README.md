@@ -39,5 +39,5 @@ Deployment manager configs (YAML) can be deployed using the *gcloud* command lin
 1. deploy using
 `gcloud deployment-manager deployments create my-fgt-poc --config config-dhcp.yaml`
 
-See also:
+### See also:
 - [Getting started with Deployment Manager](../../../../dm101.md)
