@@ -14,7 +14,7 @@ You also must know the following values:
 1. URL of image you're going to deploy (see [below](#how-to-find-image) for more details)
 1. zone where you want to create your FortiGate VM
 
-to not get lost, it's a good idea to save the values in shell variables. See the example below:
+to not get lost, it's a good idea to save these values in shell variables. See the example below:
 
 ```
 VPC_EXT_NAME=vpc-external
@@ -29,7 +29,7 @@ ZONE=europe-west1-c
 ```
 
 ### Deploy
-The commands below will deploy a FortiGate instance with 2 NICs and a 100GB logdisk
+The commands below will deploy a FortiGate instance with 2 NICs, a 100GB logdisk and a single (ephemeral) external IP
 
 ```
 # create log disk
@@ -42,6 +42,82 @@ gcloud compute instances create my-fortigate --zone=$ZONE \
   --network-interface="network=$VPC_EXT_NAME,subnet=$SB_EXT_NAME" \
   --network-interface="network=$VPC_INT_NAME,subnet=$SB_INT_NAME,no-address"
   --disk="auto-delete=yes,boot=no,device-name=my-fgt-logdisk,mode=rw,name=my-fgt-logdisk"
+```
+
+To use a static EIP, create address as a separate resource and refer it when creating the FortiGate instance:
+
+```
+gcloud compute addresses create my-fortigate-eip --region=europe-west1
+
+gcloud compute instances create my-fortigate --zone=$ZONE \
+  --machine-type=e2-standard-2 \
+  --image=$FGT_IMG_URL --can-ip-forward \
+  --network-interface="network=$VPC_EXT_NAME,subnet=$SB_EXT_NAME,address=my-fortigate-eip" \
+  --network-interface="network=$VPC_INT_NAME,subnet=$SB_INT_NAME,no-address"
+  --disk="auto-delete=yes,boot=no,device-name=my-fgt-logdisk,mode=rw,name=my-fgt-logdisk"
+```
+
+Route traffic from internal VPC via FortiGate by creating a custom default route:
+```
+gcloud compute routes create default-via-my-fortigate \
+  --destination-range="0.0.0.0/0" \
+  --next-hop-instance=my-fortigate \
+  --next-hop-instance-zone=$ZONE \
+  --priority=100
+```
+
+*Note:* by default, the internal VPC already includes a default route with priority 1000 via Default Internet Gateway. You must create a custom route with lower priority number or delete the built-in default route.
+
+To make the traffic flow via FortiGate instance, you have to create Cloud Firewall rules that allow it:
+```
+gcloud compute firewall-rules create allow-external-to-fgt \
+  --allow=all \
+  --network=$VPC_EXT_NAME
+
+gcloud compute firewall-rules create allow-internal-to-fgt \
+  --allow=all \
+  --network=$VPC_INT_NAME
+```
+
+*Complete example:*
+```
+VPC_EXT_NAME=vpc-external
+SB_EXT_NAME=sb-external-euwest1
+VPC_INT_NAME=vpc-internal
+SB_INT_NAME=sb-internal-euwest1
+
+# find newest BYOL image
+FGT_IMG_URL=$(gcloud compute images list --project fortigcp-project-001 --filter="name ~ fortinet-fgt- AND status:READY" --format="get(selfLink)" | sort -r | head -1)
+
+ZONE=europe-west1-c
+
+# create log disk
+gcloud compute disks create my-fgt-logdisk --size=100 --type=pd-ssd --zone=$ZONE
+
+# create static external IP
+gcloud compute addresses create my-fortigate-eip --region=europe-west1
+
+#create FortiGate instance
+gcloud compute instances create my-fortigate --zone=$ZONE \
+  --machine-type=e2-standard-2 \
+  --image=$FGT_IMG_URL --can-ip-forward \
+  --network-interface="network=$VPC_EXT_NAME,subnet=$SB_EXT_NAME,address=my-fortigate-eip" \
+  --network-interface="network=$VPC_INT_NAME,subnet=$SB_INT_NAME,no-address"
+  --disk="auto-delete=yes,boot=no,device-name=my-fgt-logdisk,mode=rw,name=my-fgt-logdisk"
+
+gcloud compute routes create default-via-my-fortigate \
+  --destination-range="0.0.0.0/0" \
+  --next-hop-instance=my-fortigate \
+  --next-hop-instance-zone=$ZONE \
+  --priority=100
+
+gcloud compute firewall-rules create allow-external-to-fgt \
+  --allow=all \
+  --network=$VPC_EXT_NAME
+
+gcloud compute firewall-rules create allow-internal-to-fgt \
+  --allow=all \
+  --network=$VPC_INT_NAME
 ```
 
 ### [optional] Additional external IP addresses
@@ -68,3 +144,11 @@ will get you a list of image URLs for FortiGate PAYG, and
 `FGT_IMG=$(gcloud compute images list --project fortigcp-project-001 --filter="name ~ fortinet-fgt- AND status:READY" --format="get(selfLink)" | sort -r | head -1)`
 
 will save the URL of the newest BYOL image into FGT_IMG variable
+
+### References
+- [gcloud compute addresses create](https://cloud.google.com/sdk/gcloud/reference/compute/addresses/create)
+- [gcloud compute disks create](https://cloud.google.com/sdk/gcloud/reference/compute/disks/create)
+- [gcloud compute instances create](https://cloud.google.com/sdk/gcloud/reference/compute/instances/create)
+- [gcloud compute routes create](https://cloud.google.com/sdk/gcloud/reference/compute/routes/create)
+- [gcloud compute firewall-rules create](https://cloud.google.com/sdk/gcloud/reference/compute/firewall-rules/create)
+- [Protocol Forwarding](https://cloud.google.com/load-balancing/docs/protocol-forwarding)

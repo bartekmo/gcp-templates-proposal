@@ -77,8 +77,8 @@ resources:
       type: PERSISTENT
       boot: true
       autoDelete: true
-      guestOsFeatures:
       {% if properties.multiIpSubnetEnable %}
+      guestOsFeatures:
       - type: MULTI_IP_SUBNET
       {% endif %}
       licenses:
@@ -169,6 +169,12 @@ resources:
               set device port{{loop.index}}
               set gateway {{ netcalc.getNthIp( nic.ipCidrRange, 0 )}}
             next
+          {%- elif (not properties.multiIpSubnetEnable) and ("ipCidrRange" in nic) %}
+            edit {{loop.index}}
+              set device port{{loop.index}}
+              set gateway {{ netcalc.getNthIp( nic.ipCidrRange, 0 )}}
+              set dst {{nic.ipCidrRange}}
+            next
           {%- endif %}
           {%- endfor %}
           end
@@ -224,7 +230,11 @@ resources:
   properties:
     network: {{ properties.networks[1].vpcLink }}
     destRange: {{ route.destRange }}
+    {% if "ipCidrRange" in properties.networks[1] %}
     nextHopIp: $(ref.{{ prefix }}-{{ fgname }}.networkInterfaces[1].networkIP)
+    {% else %}
+    nextHopInstance: $(ref.{{ prefix }}-{{ fgname }}.selfLink)
+    {% endif %}
     priority: {{ route.priority | default(500) }}
     tags: {{ route.tags | default([])}}
     description: {{ route.description | default("route via FGT") }}
