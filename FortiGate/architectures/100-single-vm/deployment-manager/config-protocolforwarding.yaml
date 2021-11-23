@@ -41,7 +41,7 @@ resources:
       ipCidrRange: 172.20.1.0/24
 # Without a public IP assigned to port1 the instance will not be able to communicate with Internet
 # (and we will not be able to connect to it), so let's assign 1st of the additionalExternalIPs
-# as FortiGate's primary address on port1
+# as FortiGate's primary address on port1. The others can be added as secondaryip or simply used as VIPs.
     fwConfig: |
       config sys interface
         edit port1
