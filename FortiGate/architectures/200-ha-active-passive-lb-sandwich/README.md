@@ -1,7 +1,7 @@
 # Active-Passive HA FortiGate cluster in LB Sandwich
 This template deploys 2 FortiGate instances in an Active-Passive HA cluster between two load balancers ("load balancer sandwich" pattern). LB Sandwich design enables use of multiple public IPs and provides faster, configurable failover times when compared to SDN-connector based. Due to Google Cloud Load Balancer limitations only UDP and TCP traffic is supported. Also, mind that during failover event the existing connections will be terminated.
 
-HA multi-zone deployments provide 99.98% Compute Engine SLA vs. 99.5-99.9% for single instances. See [Google Compute Engine SLA](https://cloud.google.com/compute/sla) for details.
+HA multi-zone deployments provide 99.98% Compute Engine SLA vs. 99.5% for single instances. See [Google Compute Engine SLA](https://cloud.google.com/compute/sla) for details.
 
 * Deployment Manager Template file: [modules/fgcp-ha-ap-elbilb.jinja](../modules/deployment-manager/fgcp-ha-ap-elbilb.jinja)
 * Deployment Manager Schema file: [modules/fgcp-ha-ap-elbilb.jinja.schema](../modules/deployment-manager/fgcp-ha-ap-elbilb.jinja.schema)
