@@ -27,9 +27,14 @@ resources:
     {% endif %}
 {% endfor %}
 
-{% set flagCreateTarget = false %}
 {% for nic in properties.networks if "additionalExternalIPs" in nic %}
-  {% set flagCreateTarget = true %}
+  {% if 0==loop.index0 %}
+- name: {{ prefix }}-{{ fgname }}-target
+  type: compute.v1.targetInstance
+  properties:
+    instance: $(ref.{{ prefix }}-{{ fgname }}.selfLink)
+    zone: {{ zone }}
+  {% endif %}
   {% for additionalIP in nic.additionalExternalIPs if additionalIP.createAddressAndFwdRule %}
 - name: {{ prefix }}-{{ additionalIP.name }}
   type: compute.v1.address
@@ -51,14 +56,6 @@ resources:
     {% endfor %} {# for listed protocols #}
   {% endfor %} {# for each additional external IP #}
 {% endfor %} {# for each nic #}
-
-{% if flagCreateTarget %}
-- name: {{ prefix }}-{{ fgname }}-target
-  type: compute.v1.targetInstance
-  properties:
-    instance: $(ref.{{ prefix }}-{{ fgname }}.selfLink)
-    zone: {{ zone }}
-{% endif %}
 
 {% if properties.logDiskSizeGb>0 %}
 - name: {{ prefix }}-{{ fgname }}-logdisk

@@ -126,13 +126,16 @@ gcloud compute firewall-rules create allow-internal-to-fgt \
 
 ```
 gcloud compute target-instance create my-fgt-target \
-  --target-instance my-fortigate
+  --instance=my-fortigate --zone=$ZONE
 ```
 
 Next, a forwarding rule can be added:
 ```
 gcloud compute forwarding-rules create my-fwd-rule \
-  --
+  --target-instance=my-fgt-target \
+  --target-instance-zone=$ZONE \
+  --ip-protocol=TCP \
+  --ports=ALL
 ```
 
 ## How to find the image

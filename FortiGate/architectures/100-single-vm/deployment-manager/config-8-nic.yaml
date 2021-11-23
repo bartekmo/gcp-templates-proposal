@@ -1,8 +1,9 @@
 imports:
-- path: singlevm2.jinja
+- path: ../../../modules-dm/singlevm2.jinja
+  name: singlevm2.jinja
 - path: ../../../modules-dm/utils-sample-vpcs.jinja
   name: sample-vpcs.jinja
-- path: ../../../../../secrets/FGVM04TM21008011.lic
+- path: ../../../../secrets/FGVM04TM21008011.lic
   name: byol.lic
 
 resources:

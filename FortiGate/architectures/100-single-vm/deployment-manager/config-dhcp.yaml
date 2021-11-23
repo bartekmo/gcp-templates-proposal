@@ -1,6 +1,7 @@
 imports:
-- path: ../singlevm2.jinja
-- path: ../../../../modules-dm/utils-sample-vpcs.jinja
+- path: ../../../modules-dm/singlevm2.jinja
+  name: singlevm2.jinja
+- path: ../../../modules-dm/utils-sample-vpcs.jinja
   name: sample-vpcs.jinja
 
 resources:

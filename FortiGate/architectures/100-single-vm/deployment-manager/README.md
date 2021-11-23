@@ -27,9 +27,9 @@ For full list of supported properties, please consult the [schema file](../../..
 ![](https://lucid.app/publicSegments/view/0d34e874-914a-473e-a9f9-2c6464f1e1dd/image.png)
 
 - [config-dhcp.yaml](config-dhcp.yaml) - very basic example of deploying with 2 automatically configured (DHCP) network interfaces and PAYG license
-- [config-byol.yaml](config-byol.yaml) - 2-nic instance with BYOL license pulled from a license file and NICs configured statically for empty subnets
-- [config-protocolforwarding.yaml](config-protocolforwarding.yaml) - BYOL licensing, statically configured NICs and 3 public IPs forwarded using protocol forwarding
-- [config-8-nic.yaml](config-8-nic.yaml) - 8-nic instance with BYOL license
+- [config-byol.yaml](config-byol.yaml) - 2-nic instance with BYOL license pulled from a license file and NICs configured statically for empty subnets. Remember to modify to point to your own lic file
+- [config-protocolforwarding.yaml](config-protocolforwarding.yaml) - BYOL licensing, statically configured NICs and 3 public IPs forwarded using protocol forwarding. Additionally this template shows how you can provision FortiGate configuration during deployment and manually define prefix for resource names. Remember to modify to point to your own lic file
+- [config-8-nic.yaml](config-8-nic.yaml) - 8-nic instance with BYOL license. Remember to modify to point to your own lic file
 
 ## How to deploy
 Deployment manager configs (YAML) can be deployed using the *gcloud* command line tool.
