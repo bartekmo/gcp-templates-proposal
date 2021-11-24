@@ -23,7 +23,7 @@ Additional resources deployed include:
 - external IPs - by default one floating IP for incoming traffic from Internet and 2 management IPs, to add more external IPs simply list them in the **publicIPs** property
 - Cloud Router/Cloud NAT service is used to allow outbound traffic from port1 of secondary FortiGate instance (e.g. for license activation)
 
-![ELBILB Sandwich diagram](https://app.lucidchart.com/publicSegments/view/b1ee079a-3c64-4e75-acb7-a42e3b6f8982/image.png)
+![ELBILB Sandwich diagram](https://lucid.app/publicSegments/view/190fc808-660a-4094-aeb7-c3ef4ebcb2c5/image.png)
 
 ## Deployed Resources
 - 2 FortiGate VM instances with 4 NICs each

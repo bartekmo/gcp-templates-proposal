@@ -41,6 +41,17 @@ Typical LB sandwich deployment for N-S inspection with a single public IP addres
 This template adds a route on external side of the cluster. It can be used to route traffic from cloud-native connectivity like Cloud VPN or Interconnect via FGTs to internal side.
 
 ## Prerequisites and Requirements
-You MUST create the external and protected VPC networks and subnets before using this template. External and protected subnets MUST be in the same region where VMs are deployed.
+You MUST create the external and protected VPC networks and subnets before using this template. External and protected subnets MUST be in the same region where VMs are deployed. You CAN create hasync and mgmt VPC Networks and subnets yourself or let the template create them for you.
 
 All VPC Networks already created before deployment and provided to the template using `networks.*.vpc` and `networks.*.subnet` properties, SHOULD have first 2 IP addresses available for FortiGate use. Addresses are assigned statically and it's the responsibility of administrator to make sure they do not overlap.
+
+## How to deploy
+Deployment manager configs (YAML) can be deployed using the *gcloud* command line tool.
+
+1. Open Cloud Shell
+1. clone the git repository (it will also work if you download only a single yaml file and change the link in *imports* section to be an absolute URL of the file on GitHub)
+1. deploy using
+`gcloud deployment-manager deployments create my-fgt-poc --config ha-ap-lb-sandwich.yaml`
+
+### See also:
+- [Getting started with Deployment Manager](../../../../dm101.md)
