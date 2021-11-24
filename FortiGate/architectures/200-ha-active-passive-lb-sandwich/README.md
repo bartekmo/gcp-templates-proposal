@@ -21,7 +21,7 @@ As unicast FGCP clustering of FortiGate instances requires dedicated heartbeat a
 Additional resources deployed include:
 - default route for the internal VPC Network pointing to the internal load balancer rule
 - external IPs - by default one floating IP for incoming traffic from Internet and 2 management IPs, to add more external IPs simply list them in the **publicIPs** property
-- Cloud Router/Cloud NAT service is used to allow outbound traffic from port1 of secondary FortiGate instance (e.g. for license activation)
+- Cloud Router/Cloud NAT service is used to allow outbound traffic from port1 of FortiGate instance (e.g. for license activation)
 
 ![ELBILB Sandwich diagram](https://lucid.app/publicSegments/view/190fc808-660a-4094-aeb7-c3ef4ebcb2c5/image.png)
 
