@@ -1,13 +1,13 @@
 resources:
 {% for spoke in properties.spokes %}
-{% set spokeName = spoke.split( "/" ) | last %}
+{% set spokeName = spoke.name | default(spoke.url.split( "/" ) | last) %}
 
 {% if properties.deleteSpokeDefaultRoutes %}
 {# NOTE: this code will break if default route was already deleted and deleteDefaultROutes is set to true #}
 - name: {{ spokeName }}-listDefaultRoutes
   action: gcp-types/compute-v1:compute.routes.list
   properties:
-    filter: (destRange="0.0.0.0/0") AND (network="{{ spoke }}")
+    filter: (destRange="0.0.0.0/0") AND (network="{{ spoke.url }}")
 - name: {{ spokeName }}-deleteDefaultRoute
   action: gcp-types/compute-v1:compute.routes.delete
   metadata:
@@ -24,7 +24,7 @@ resources:
     network: {{ spokeName }}
     networkPeering:
       name: {{ properties.prefix }}-peer-{{ spokeName }}-to-hub
-      network: {{ properties.hubLink }}
+      network: {{ properties.hub.url }}
       exchangeSubnetRoutes: true
       importCustomRoutes: true
   metadata:
@@ -35,15 +35,18 @@ resources:
     - {{ spokeName }}-deleteDefaultRoute
     {% endif %}
     {% if not loop.first %}
-    - {{ properties.prefix }}-peer-hub-to-{{ properties.spokes[loop.index0-1].split('/') | last }}
+    - {{ properties.prefix }}-peer-hub-to-{{ properties.spokes[loop.index0-1].name | default(properties.spokes[loop.index0-1].url.split('/') | last) }}
     {% endif %}
+    {% for dependency in properties.dependsOn %}
+    - {{dependency}}
+    {% endfor %}
 - name: {{ properties.prefix }}-peer-hub-to-{{ spokeName }}
   action: gcp-types/compute-v1:compute.networks.addPeering
   properties:
-    network: {{ properties.hubLink.split( '/' ) | last }}
+    network: {{ properties.hub.name | default(properties.hub.url.split( '/' ) | last) }}
     networkPeering:
       name: {{ properties.prefix }}-peer-hub-to-{{ spokeName }}
-      network: {{ spoke }}
+      network: {{ spoke.url }}
       exchangeSubnetRoutes: true
       exportCustomRoutes: true
   metadata:
